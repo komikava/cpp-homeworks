@@ -1,0 +1,87 @@
+#include <iostream>
+#include <cmath>
+#include <Windows.h>
+using namespace std;
+
+class Point {
+public:
+    double x, y;
+    Point(double x, double y) : x(x), y(y) {}
+};
+
+class GeometryFigure {
+private:
+    Point p1, p2, p3, p4;
+
+    double CalculateSideLength(Point A, Point B) {
+        return sqrt(pow(B.x - A.x, 2) + pow(B.y - A.y, 2));
+    }
+
+public:
+    GeometryFigure(Point point1, Point point2, Point point3, Point point4)
+        : p1(point1), p2(point2), p3(point3), p4(point4) {}
+
+    double CalculatePerimeter() {
+        double side = CalculateSideLength(p1, p2);
+        return 4 * side;
+    }
+
+    double calculateArea() {
+        double side = CalculateSideLength(p1, p2);
+        return side * side;
+    }
+
+    double calculateDiagonal() {
+        double side = CalculateSideLength(p1, p2);
+        return side * sqrt(2);
+    }
+
+    bool CheckoutSquare() {
+        double side1 = CalculateSideLength(p1, p2);
+        double side2 = CalculateSideLength(p2, p3);
+        double side3 = CalculateSideLength(p3, p4);
+        double side4 = CalculateSideLength(p4, p1);
+        double diagonal1 = CalculateSideLength(p1, p3);
+        double diagonal2 = CalculateSideLength(p2, p4);
+        return (side1 == side2 && side2 == side3 && side3 == side4 &&
+                diagonal1 == diagonal2);
+    }
+};
+
+int main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
+    double x1, y1, x2, y2, x3, y3, x4, y4;
+    // Input the coordinates of the square's points
+    cout << "Enter coordinates for point 1 (x1, y1): ";
+    cin >> x1 >> y1;
+
+    cout << "Enter coordinates for point 2 (x2, y2): ";
+    cin >> x2 >> y2;
+
+    cout << "Enter coordinates for point 3 (x3, y3): ";
+    cin >> x3 >> y3;
+
+    cout << "Enter coordinates for point 4 (x4, y4): ";
+    cin >> x4 >> y4;
+
+    Point point1(x1, y1);
+    Point point2(x2, y2);
+    Point point3(x3, y3);
+    Point point4(x4, y4);
+
+    GeometryFigure square(point1, point2, point3, point4);
+
+    if (square.CheckoutSquare()) {
+        cout << "This is a square!" << endl;
+        cout << "Perimeter: " << square.CalculatePerimeter() << endl;
+        cout << "Area: " << square.calculateArea() << endl;
+        cout << "Diagonal: " << square.calculateDiagonal() << endl;
+    }
+    else {
+        cout << "This is not a square." << endl;
+    }
+
+    return 0;
+}
