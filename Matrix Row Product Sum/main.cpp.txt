@@ -1,0 +1,49 @@
+#include <iostream>
+#include <Windows.h>
+using namespace std;
+
+int main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
+    int n, m;
+    cout << "Enter the number of rows of the matrix (n): ";
+    cin >> n;
+    cout << "Enter the number of columns of the matrix (m): ";
+    cin >> m;
+
+    // Allocate memory for the matrix
+    int** matrix = new int*[n];
+    for (int i = 0; i < n; i++) {
+        matrix[i] = new int[m];
+    }
+
+    // Input matrix elements
+    cout << "Enter the elements of the matrix: " << endl;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cin >> matrix[i][j];
+        }
+    }
+
+    // Calculate the sum of products of elements of each row
+    int total_sum = 0;
+    for (int i = 0; i < n; i++) {
+        int row_product = 1;
+        for (int j = 0; j < m; j++) {
+            row_product *= matrix[i][j];  // Correct the row product calculation
+        }
+        total_sum += row_product;
+    }
+
+    // Output the total sum
+    cout << "Sum of the products of the elements of each row: " << total_sum << endl;
+
+    // Deallocate memory for the matrix
+    for (int i = 0; i < n; i++) {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+
+    return 0;
+}

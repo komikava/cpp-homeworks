@@ -1,0 +1,195 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <windows.h>
+#include <ctime>
+
+using namespace std;
+
+class Date {
+private:
+    int day, month, year;
+
+    // Number of days in each month
+    int daysInMonth(int m, int y) {
+        if (m == 2) return (isLeapYear(y) ? 29 : 28);
+        if (m == 4 || m == 6 || m == 9 || m == 11) return 30;
+        return 31;
+    }
+
+    // Check for leap year
+    bool isLeapYear(int y) {
+        return (y % 4 == 0 && (y % 100 != 0 || y % 400 == 0));
+    }
+
+public:
+    // Constructor that accepts a date string in DD/MM/YY or DD.MM.YY format
+    Date(string inputDate) {
+        char separator;
+        stringstream ss(inputDate);
+        ss >> day >> separator >> month >> separator >> year;
+        if (year < 100) year += 2000;  // Adjust year to full year format
+    }
+
+    // Adding two dates
+    Date operator+(const Date& other) {
+        Date result = *this;
+        result.day += other.day;
+        result.month += other.month;
+        result.year += other.year;
+        while (result.day > daysInMonth(result.month, result.year)) {
+            result.day -= daysInMonth(result.month, result.year);
+            result.month++;
+        }
+        while (result.month > 12) {
+            result.month -= 12;
+            result.year++;
+        }
+        return result;
+    }
+
+    // Subtracting two dates
+    Date operator-(const Date& other) {
+        Date result = *this;
+        result.day -= other.day;
+        result.month -= other.month;
+        result.year -= other.year;
+        while (result.day <= 0) {
+            result.month--;
+            if (result.month <= 0) {
+                result.month = 12;
+                result.year--;
+            }
+            result.day += daysInMonth(result.month, result.year);
+        }
+        return result;
+    }
+
+    // Adding days to a date
+    Date operator+(int days) {
+        Date result = *this;
+        result.day += days;
+        while (result.day > daysInMonth(result.month, result.year)) {
+            result.day -= daysInMonth(result.month, result.year);
+            result.month++;
+            if (result.month > 12) {
+                result.month = 1;
+                result.year++;
+            }
+        }
+        return result;
+    }
+
+    // Subtracting days from a date
+    Date operator-(int days) {
+        Date result = *this;
+        result.day -= days;
+        while (result.day <= 0) {
+            result.month--;
+            if (result.month <= 0) {
+                result.month = 12;
+                result.year--;
+            }
+            result.day += daysInMonth(result.month, result.year);
+        }
+        return result;
+    }
+
+    // Adding months to a date
+    Date addMonths(int months) {
+        Date result = *this;
+        result.month += months;
+        while (result.month > 12) {
+            result.month -= 12;
+            result.year++;
+        }
+        if (result.day > daysInMonth(result.month, result.year)) {
+            result.day = daysInMonth(result.month, result.year);
+        }
+        return result;
+    }
+
+    // Subtracting months from a date
+    Date subtractMonths(int months) {
+        Date result = *this;
+        result.month -= months;
+        while (result.month <= 0) {
+            result.month += 12;
+            result.year--;
+        }
+        if (result.day > daysInMonth(result.month, result.year)) {
+            result.day = daysInMonth(result.month, result.year);
+        }
+        return result;
+    }
+
+    // Adding years to a date
+    Date addYears(int years) {
+        Date result = *this;
+        result.year += years;
+        if (result.month == 2 && result.day == 29 && !isLeapYear(result.year)) {
+            result.day = 28;
+        }
+        return result;
+    }
+
+    // Subtracting years from a date
+    Date subtractYears(int years) {
+        Date result = *this;
+        result.year -= years;
+        if (result.month == 2 && result.day == 29 && !isLeapYear(result.year)) {
+            result.day = 28;
+        }
+        return result;
+    }
+
+    // Displaying the date
+    void display() {
+        cout << "Date: " << (day < 10 ? "0" : "") << day << "/"
+             << (month < 10 ? "0" : "") << month << "/"
+             << year << endl;
+    }
+};
+
+int main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    string inputDate1, inputDate2;
+
+    // Input dates in the format DD/MM/YY or DD.MM.YY
+    cout << "Enter the first date in the format (DD/MM/YY): ";
+    cin >> inputDate1;
+    Date date1(inputDate1);
+
+    cout << "Enter the second date in the format (DD/MM/YY): ";
+    cin >> inputDate2;
+    Date date2(inputDate2);
+
+    // Adding and subtracting dates
+    Date addedDates = date1 + date2;
+    Date subtractedDates = date1 - date2;
+
+    cout << "Date after addition: ";
+    addedDates.display();
+    cout << "Date after subtraction: ";
+    subtractedDates.display();
+
+    // Adding and subtracting months and years
+    Date dateWithAddedMonths = date1.addMonths(5);
+    cout << "Date after adding 5 months: ";
+    dateWithAddedMonths.display();
+
+    Date dateWithSubtractedMonths = date1.subtractMonths(5);
+    cout << "Date after subtracting 5 months: ";
+    dateWithSubtractedMonths.display();
+
+    Date dateWithAddedYears = date1.addYears(3);
+    cout << "Date after adding 3 years: ";
+    dateWithAddedYears.display();
+
+    Date dateWithSubtractedYears = date1.subtractYears(3);
+    cout << "Date after subtracting 3 years: ";
+    dateWithSubtractedYears.display();
+
+    return 0;
+}

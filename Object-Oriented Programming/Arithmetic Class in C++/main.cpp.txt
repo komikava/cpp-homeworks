@@ -1,0 +1,116 @@
+#include <iostream>
+#include <Windows.h>
+using namespace std;
+
+class Arithmetic {
+    int a, b;
+
+public:
+    // Method for inputting values of a and b
+    void finput(int x, int y) {
+        a = x;
+        b = y;
+    }
+
+    // Method for outputting values of a and b
+    void foutput() {
+        cout << "a = " << a << endl;
+        cout << "b = " << b << endl;
+    }
+
+    // Method for addition
+    int plus() {
+        return (a + b);
+    }
+
+    // Method for subtraction
+    void minus() {
+        cout << a - b << endl;
+    }
+
+    // Method for division
+    void divide() {
+        if (b != 0)
+            cout << a / b << endl;
+        else
+            cout << "Error: Division by zero" << endl;
+    }
+
+    // Method for multiplication
+    void multiply() {
+        cout << a * b << endl;
+    }
+
+    // Method for modulo operation
+    void mod() {
+        if (b != 0)
+            cout << a % b << endl;
+        else
+            cout << "Error: Division by zero" << endl;
+    }
+
+    // Method to check if a is greater than b
+    bool isGreater() {
+        return a > b;
+    }
+
+    // Method to calculate a raised to the power of b
+    int power() {
+        int result = 1;
+        for (int i = 0; i < b; i++) {
+            result *= a;
+        }
+        return result;
+    }
+
+    // Method to calculate the average of a and b
+    double average() {
+        return (a + b) / 2.0;
+    }
+
+    // Method to find the minimum between a and b
+    int findmin() {
+        return (a < b) ? a : b;
+    }
+};
+
+int main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
+    Arithmetic ob1, ob2;
+    int x1, y1, x2, y2;
+    
+    cout << "Enter two integers for the first object (x1, y1): ";
+    cin >> x1 >> y1;
+    cout << "Enter two integers for the second object (x2, y2): ";
+    cin >> x2 >> y2;
+
+    ob1.finput(x1, y1);
+    ob2.finput(x2, y2);
+
+    // Output the values of the objects
+    cout << "Object 1: " << endl;
+    ob1.foutput();
+    cout << "Object 2: " << endl;
+    ob2.foutput();
+    
+    // Arithmetic operations
+    cout << "Sum of object 1: " << ob1.plus() << endl;
+    cout << "Sum of object 2: " << ob2.plus() << endl;
+
+    // Additional operations
+    cout << "Remainder of object 1: "; ob1.mod();
+    cout << "Is object 1 greater than object 2? " << (ob1.isGreater() ? "Yes" : "No") << endl;
+
+    // Power of object 1
+    cout << "Object 1 raised to the power of object 2: " << ob1.power() << endl;
+
+    // Average
+    cout << "The average of object 1: " << ob1.average() << endl;
+
+    // Minimum
+    cout << "The smaller of object 1 and object 2: " << ob1.findmin() << endl;
+
+    return 0;
+}

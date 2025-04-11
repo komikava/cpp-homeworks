@@ -1,0 +1,132 @@
+#include <iostream>
+#include <Windows.h>
+#include <string>
+using namespace std;
+
+// Base class: Aircraft
+class Aircraft {
+protected:
+    string model;
+    int maxSpeed;
+    int capacity; // Number of seats
+public:
+    Aircraft(const string& model, int maxSpeed, int capacity) : model(model),
+    maxSpeed(maxSpeed), capacity(capacity) {}
+
+    virtual void fly() const {
+        cout << "The aircraft is flying." << endl;
+    }
+
+    void displayInfo() const {
+        cout << "Model: " << model << ", Max Speed: " << maxSpeed << " km/h, Capacity: " << capacity << " passengers" << endl;
+    }
+};
+
+// Level 1: Passenger Aircraft and Military Aircraft
+class PassengerAircraft : public Aircraft {
+public:
+    PassengerAircraft(const string& model, int maxSpeed, int capacity) : Aircraft(model, maxSpeed, capacity) {}
+
+    void fly() const override {
+        cout << "The passenger aircraft is flying with passengers." << endl;
+    }
+};
+
+class MilitaryAircraft : public Aircraft {
+protected:
+    int weaponLoad; // Weapon load in kg
+public:
+    MilitaryAircraft(const string& model, int maxSpeed, int capacity, int weaponLoad) :
+    Aircraft(model, maxSpeed, capacity), weaponLoad(weaponLoad) {}
+
+    void displayInfo() const {
+        Aircraft::displayInfo();
+        cout << "Weapon Load: " << weaponLoad << " kg" << endl;
+    }
+};
+
+// Level 2: Boeing and Airbus
+class Boeing : public PassengerAircraft {
+public:
+    Boeing(const string& model, int maxSpeed, int capacity) : PassengerAircraft(model, maxSpeed, capacity) {}
+
+    void fly() const override {
+        cout << "The Boeing " << model << " is flying smoothly." << endl;
+    }
+};
+
+class Airbus : public PassengerAircraft {
+public:
+    Airbus(const string& model, int maxSpeed, int capacity) : PassengerAircraft(model, maxSpeed, capacity) {}
+
+    void fly() const override {
+        cout << "The Airbus " << model << " is flying comfortably." << endl;
+    }
+};
+
+// Level 3: Fighter Jets and Bombers
+class FighterJet : public MilitaryAircraft {
+public:
+    FighterJet(const string& model, int maxSpeed, int weaponLoad) :
+    MilitaryAircraft(model, maxSpeed, 1, weaponLoad) {}
+
+    void fly() const override {
+        cout << "The fighter jet " << model << " is performing a combat mission." << endl;
+    }
+};
+
+class Bomber : public MilitaryAircraft {
+public:
+    Bomber(const string& model, int maxSpeed, int weaponLoad) :
+    MilitaryAircraft(model, maxSpeed, 4, weaponLoad) {}
+
+    void fly() const override {
+        cout << "The bomber " << model << " is performing a bombing mission." << endl;
+    }
+};
+
+// Level 4: F-16 and B-2
+class F16 : public FighterJet {
+public:
+    F16(const string& model, int maxSpeed, int weaponLoad) : FighterJet(model, maxSpeed, weaponLoad) {}
+
+    void fly() const override {
+        cout << "The F-16 " << model << " is performing air maneuvers." << endl;
+    }
+};
+
+class B2 : public Bomber {
+public:
+    B2(const string& model, int maxSpeed, int weaponLoad) : Bomber(model, maxSpeed, weaponLoad) {}
+
+    void fly() const override {
+        cout << "The B-2 " << model << " is approaching the target stealthily." << endl;
+    }
+};
+
+// Main program
+int main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
+    // Create objects
+    Boeing boeing("747", 917, 660);
+    Airbus airbus("A380", 1020, 850);
+    F16 f16("Fighting Falcon", 2414, 7000);
+    B2 b2("Spirit", 1010, 20000);
+
+    // Display and fly
+    boeing.displayInfo();
+    boeing.fly();
+    
+    airbus.displayInfo();
+    airbus.fly();
+    
+    f16.displayInfo();
+    f16.fly();
+    
+    b2.displayInfo();
+    b2.fly();
+
+    return 0;
+}

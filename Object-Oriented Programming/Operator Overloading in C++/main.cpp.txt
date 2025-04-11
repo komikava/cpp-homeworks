@@ -1,0 +1,152 @@
+#include <iostream>
+#include <Windows.h>
+using namespace std;
+
+class Variant1 {
+    double ob1, ob2;
+public:
+    Variant1(double x = 0, double y = 0) : ob1(x), ob2(y) {}
+
+    void show() const {
+        cout << "ob1 = " << ob1 << ", ob2 = " << ob2 << endl;
+    }
+
+    // Operator for adding two objects
+    Variant1 operator+(const Variant1& other) const {
+        return Variant1(ob1 + other.ob1, ob2 + other.ob2);
+    }
+
+    // Operator for subtracting two objects
+    Variant1 operator-(const Variant1& other) const {
+        return Variant1(ob1 - other.ob1, ob2 - other.ob2);
+    }
+
+    // Operator for subtracting a number from an object
+    Variant1 operator-(double m) const {
+        return Variant1(ob1 - m, ob2 - m);
+    }
+
+    // Friend operator for subtracting an object from a number
+    friend Variant1 operator-(double m, const Variant1& obj) {
+        return Variant1(m - obj.ob1, m - obj.ob2);
+    }
+
+    // Operator for adding a number to an object
+    Variant1 operator+(double m) const {
+        return Variant1(ob1 + m, ob2 + m);
+    }
+
+    // Friend operator for adding an object to a number
+    friend Variant1 operator+(double m, const Variant1& obj) {
+        return Variant1(m + obj.ob1, m + obj.ob2);
+    }
+
+    // Operator for dividing an object by a number
+    Variant1 operator/(double m) const {
+        return Variant1(ob1 / m, ob2 / m);
+    }
+
+    // Operator for multiplying an object by a number
+    Variant1 operator*(double m) const {
+        return Variant1(ob1 * m, ob2 * m);
+    }
+
+    // Friend operator for multiplying a number by an object
+    friend Variant1 operator*(double m, const Variant1& obj) {
+        return Variant1(m * obj.ob1, m * obj.ob2);
+    }
+
+    // Postfix increment operator
+    Variant1 operator++(int) {
+        Variant1 temp = *this;
+        ob1++;
+        ob2++;
+        return temp;
+    }
+
+    // Postfix decrement operator
+    Variant1 operator--(int) {
+        Variant1 temp = *this;
+        ob1--;
+        ob2--;
+        return temp;
+    }
+
+    // Method for displaying the values of the object
+    void print() const {
+        cout << "(" << ob1 << ", " << ob2 << ")" << endl;
+    }
+};
+
+int main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    Variant1 ob1(10, 20), ob2(5, 15), result;
+    int m;
+    
+    cout << "Enter a number to operate with both variables: ";
+    cin >> m;
+    cout << endl;
+
+    // Display initial values of the objects
+    cout << "Initial values:" << endl;
+    cout << "ob1: ";
+    ob1.show();
+    cout << "ob2: ";
+    ob2.show();
+    cout << endl;
+
+    // Operations
+    result = ob1 + ob2;
+    cout << "ob1 + ob2: ";
+    result.show();
+    cout << "\n";
+
+    result = ob1 - ob2;
+    cout << "ob1 - ob2: ";
+    result.show();
+    cout << "\n";
+
+    result = ob1 + m;
+    cout << "ob1 + " << m << ": ";
+    result.show();
+    cout << "\n";
+
+    result = m + ob1;
+    cout << m << " + ob1: ";
+    result.show();
+    cout << "\n";
+
+    result = ob1 - m;
+    cout << "ob1 - " << m << ": ";
+    result.show();
+    cout << "\n";
+
+    result = m - ob1;
+    cout << m << " - ob1: ";
+    result.show();
+    cout << "\n";
+
+    result = ob1 * m;
+    cout << "ob1 * " << m << ": ";
+    result.show();
+    cout << "\n";
+
+    result = ob1 / m;
+    cout << "ob1 / " << m << ": ";
+    result.show();
+    cout << "\n";
+
+    cout << "ob1++: ";
+    ob1++.show();
+    cout << "After ob1++: ";
+    ob1.show();
+    cout << "\n";
+
+    cout << "ob1--: ";
+    ob1--.show();
+    cout << "After ob1--: ";
+    ob1.show();
+
+    return 0;
+}

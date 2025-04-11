@@ -1,0 +1,26 @@
+#include <iostream>
+#include <windows.h>
+using namespace std;
+
+bool isPointInRegion(double x, double y) {
+    return y <= -0.5 * x + 1 && y >= 0.5 * x - 1 && x >= 0 && x <= 2;
+}
+
+int main() {
+    double x, y;
+
+    cout << "Enter coordinate x: ";
+    cin >> x;
+
+    cout << "Enter coordinate y: ";
+    cin >> y;
+
+    if (isPointInRegion(x, y)) {
+        cout << "The point belongs to the region." << endl;
+    }
+    else {
+        cout << "The point does not belong to the region." << endl;
+    }
+
+    return 0;
+}

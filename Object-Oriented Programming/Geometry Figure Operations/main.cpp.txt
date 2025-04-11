@@ -1,0 +1,166 @@
+#include <iostream>
+#include <cmath>
+#include <Windows.h>
+using namespace std;
+
+// Class to represent a point
+class Point {
+public:
+    double x, y;
+    Point(double x = 0, double y = 0) : x(x), y(y) {}
+    
+    // Output the coordinates of the point
+    void print() const {
+        cout << "(" << x << ", " << y << ")";
+    }
+};
+
+// Class to work with geometric figures (square)
+class GeometryFigure {
+private:
+    Point p1, p2, p3, p4;
+    
+    // Helper function to calculate the side length
+    double CalculateSideLength(const Point& A, const Point& B) const {
+        return sqrt(pow(B.x - A.x, 2) + pow(B.y - A.y, 2));
+    }
+
+public:
+    // Constructor
+    GeometryFigure(const Point& point1, const Point& point2, const Point& point3, const Point& point4)
+        : p1(point1), p2(point2), p3(point3), p4(point4) {}
+
+    // Move the figure along the X-axis
+    void moveX(double deltaX) {
+        p1.x += deltaX;
+        p2.x += deltaX;
+        p3.x += deltaX;
+        p4.x += deltaX;
+    }
+
+    // Move the figure in any direction (deltaX, deltaY)
+    void move(double deltaX, double deltaY) {
+        p1.x += deltaX; p1.y += deltaY;
+        p2.x += deltaX; p2.y += deltaY;
+        p3.x += deltaX; p3.y += deltaY;
+        p4.x += deltaX; p4.y += deltaY;
+    }
+
+    // Rotate the figure by a given angle (in radians)
+    void rotate(double angle) {
+        double cosA = cos(angle);
+        double sinA = sin(angle);
+
+        auto rotatePoint = [&](Point& p) {
+            double newX = p.x * cosA - p.y * sinA;
+            double newY = p.x * sinA + p.y * cosA;
+            p.x = newX;
+            p.y = newY;
+        };
+
+        rotatePoint(p1);
+        rotatePoint(p2);
+        rotatePoint(p3);
+        rotatePoint(p4);
+    }
+
+    // Scale the figure by a given factor
+    void scale(double factor) {
+        p1.x *= factor; p1.y *= factor;
+        p2.x *= factor; p2.y *= factor;
+        p3.x *= factor; p3.y *= factor;
+        p4.x *= factor; p4.y *= factor;
+    }
+
+    // Output the coordinates of the figure
+    void print() const {
+        cout << "Coordinates of the figure:" << endl;
+        cout << "Point 1: "; p1.print(); cout << endl;
+        cout << "Point 2: "; p2.print(); cout << endl;
+        cout << "Point 3: "; p3.print(); cout << endl;
+        cout << "Point 4: "; p4.print(); cout << endl;
+    }
+
+    // Check if the figure is a square
+    bool isSquare() const {
+        double side1 = CalculateSideLength(p1, p2);
+        double side2 = CalculateSideLength(p2, p3);
+        double side3 = CalculateSideLength(p3, p4);
+        double side4 = CalculateSideLength(p4, p1);
+        double diagonal1 = CalculateSideLength(p1, p3);
+        double diagonal2 = CalculateSideLength(p2, p4);
+
+        return (side1 == side2 && side2 == side3 && side3 == side4 && diagonal1 == diagonal2);
+    }
+
+    // Calculate the perimeter of the figure (assuming square)
+    double calculatePerimeter() const {
+        double side = CalculateSideLength(p1, p2);
+        return 4 * side;
+    }
+
+    // Calculate the area of the figure (assuming square)
+    double calculateArea() const {
+        double side = CalculateSideLength(p1, p2);
+        return side * side;
+    }
+
+    // Calculate the diagonal of the figure (assuming square)
+    double calculateDiagonal() const {
+        double side = CalculateSideLength(p1, p2);
+        return side * sqrt(2);
+    }
+};
+
+int main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
+    const double M_PI = 3.14159265358979323846;
+    double x1, y1, x2, y2, x3, y3, x4, y4;
+
+    // Input coordinates of square points
+    cout << "Enter the coordinates of point 1 (x1, y1): "; cin >> x1 >> y1;
+    cout << "Enter the coordinates of point 2 (x2, y2): "; cin >> x2 >> y2;
+    cout << "Enter the coordinates of point 3 (x3, y3): "; cin >> x3 >> y3;
+    cout << "Enter the coordinates of point 4 (x4, y4): "; cin >> x4 >> y4;
+
+    Point point1(x1, y1);
+    Point point2(x2, y2);
+    Point point3(x3, y3);
+    Point point4(x4, y4);
+
+    GeometryFigure square(point1, point2, point3, point4);
+
+    if (square.isSquare()) {
+        cout << "This is a square!" << endl;
+        square.print();
+        cout << "Perimeter: " << square.calculatePerimeter() << endl;
+        cout << "Area: " << square.calculateArea() << endl;
+        cout << "Diagonal: " << square.calculateDiagonal() << endl;
+
+        // Move along the X-axis
+        square.moveX(5);
+        cout << "\nAfter moving along the X-axis by 5:" << endl;
+        square.print();
+
+        // Move in any direction (2, 3)
+        square.move(2, 3);
+        cout << "\nAfter moving by (2, 3):" << endl;
+        square.print();
+
+        // Rotate by 45 degrees (in radians)
+        square.rotate(45 * M_PI / 180);
+        cout << "\nAfter rotating by 45 degrees:" << endl;
+        square.print();
+
+        // Scale by a factor of 1.5
+        square.scale(1.5);
+        cout << "\nAfter scaling by 1.5:" << endl;
+        square.print();
+    } else {
+        cout << "This is not a square." << endl;
+    }
+
+    return 0;
+}

@@ -1,0 +1,88 @@
+#include <iostream>
+#include <cmath>
+#include <windows.h>
+using namespace std;
+
+// Point structure to represent coordinates of points
+struct Point {
+    double x, y;
+};
+
+// Base class Quadrilateral (Abstract Class)
+class Quadrilateral {
+public:
+    virtual double perimeter() = 0;   // Pure virtual function for perimeter
+    virtual double area() = 0;        // Pure virtual function for area
+    virtual void display() = 0;       // Pure virtual function for displaying details
+};
+
+// Utility function to calculate the distance between two points
+double distance(Point a, Point b) {
+    return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
+}
+
+// Trapezoid class, derived from Quadrilateral
+class Trapezoid : public Quadrilateral {
+protected:
+    Point A, B, C, D;  // Points representing the four vertices of the trapezoid
+public:
+    // Constructor initializing points
+    Trapezoid(Point p1, Point p2, Point p3, Point p4) : A(p1), B(p2), C(p3), D(p4) {}
+
+    // Function to calculate the perimeter of the trapezoid
+    double perimeter() override {
+        return distance(A, B) + distance(B, C) + distance(C, D) + distance(D, A);
+    }
+
+    // Function to calculate the area of the trapezoid
+    double area() override {
+        double height = abs(A.y - C.y);        // Height is the vertical distance between points A and C
+        double base1 = distance(A, D);         // Distance between points A and D (first base)
+        double base2 = distance(B, C);         // Distance between points B and C (second base)
+        return 0.5 * (base1 + base2) * height; // Area of trapezoid formula
+    }
+
+    // Function to display the trapezoid's details
+    void display() override {
+        cout << "Trapezoid:\n";
+        cout << "Vertices: (" << A.x << "," << A.y << ") (" << B.x << "," << B.y << ") "
+             << "(" << C.x << "," << C.y << ") (" << D.x << "," << D.y << ")\n";
+        cout << "Perimeter: " << perimeter() << "\n";
+        cout << "Area: " << area() << "\n";
+    }
+};
+
+// IsoscelesTrapezoid class, derived from Trapezoid
+class IsoscelesTrapezoid : public Trapezoid {
+public:
+    // Constructor initializes points for the isosceles trapezoid
+    IsoscelesTrapezoid(Point p1, Point p2, Point p3, Point p4) : Trapezoid(p1, p2, p3, p4) {}
+
+    // Function to display the isosceles trapezoid's details
+    void display() override {
+        cout << "Isosceles Trapezoid:\n";
+        cout << "Vertices: (" << A.x << "," << A.y << ") (" << B.x << "," << B.y << ") "
+             << "(" << C.x << "," << C.y << ") (" << D.x << "," << D.y << ")\n";
+        cout << "Perimeter: " << perimeter() << "\n";
+        cout << "Area: " << area() << "\n";
+    }
+};
+
+// Main function to test the classes
+int main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
+    // Points for the Isosceles Trapezoid
+    Point A = { 0, 0 }, B = { 4, 3 }, C = { 6, 3 }, D = { 2, 0 };
+    IsoscelesTrapezoid it(A, B, C, D);
+    it.display();
+    cout << endl;
+
+    // Points for a regular Trapezoid
+    Point E = { 1, 1 }, F = { 3, 4 }, G = { 7, 4 }, H = { 8, 1 };
+    Trapezoid t(E, F, G, H);
+    t.display();
+
+    return 0;
+}
